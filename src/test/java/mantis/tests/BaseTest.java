@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.Date;
+
 public class BaseTest {
     public WebDriver driver;
 
@@ -19,6 +21,7 @@ public class BaseTest {
 
         driver.get("https://academ-it.ru/mantisbt/login_page.php");
         driver.manage().window().maximize();
+
     }
 
 

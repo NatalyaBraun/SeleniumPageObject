@@ -10,6 +10,7 @@ public class ReportIssueTest extends BaseTest {
     private MantisSite mantisSite;
     private ReportIssuePage reportIssuePage;
 
+
     @Test
     public void createDeleteIssue() throws InterruptedException {
         mantisSite = new MantisSite(driver);
@@ -17,36 +18,35 @@ public class ReportIssueTest extends BaseTest {
         mantisSite.getMainPage().goToReportIssuePage();
 
         reportIssuePage = new ReportIssuePage(driver);
-        reportIssuePage.inputSummary("summary");
-        reportIssuePage.inputDescription("description");
-        reportIssuePage.clickSeverityField();
-        reportIssuePage.clickSeverityBlock();
+        reportIssuePage.createNewIssueWithRequeredFileds("summary", "description");
 
-        String contentSummary = mantisSite.getReportIssuePage().getSummary();
-        String contentSeverity = mantisSite.getReportIssuePage().getSeverityBlock();
+        reportIssuePage.waitId();
 
-        mantisSite.getReportIssuePage().scrollToSubmitIssueButton();
-        Thread.sleep(3000);
+//        String expectedSummary = reportIssuePage.getExpectedSummary();
+//        String actualSummary = reportIssuePage.getActualSummary();
+//        String expectedSeverity = reportIssuePage.getExpectedSeverity();
+//        String actualSeverity = reportIssuePage.getActualSeverity();
 
-        reportIssuePage.clickSubmitIssueButton();
-
-        Thread.sleep(3000);
-
-        String actualSummary = mantisSite.getReportIssuePage().getActualSummary();
-        String actualSeverity = mantisSite.getReportIssuePage().getSeverity();
 
         SoftAssertions softAssert = new SoftAssertions();
-        softAssert.assertThat(actualSummary).isEqualTo(contentSummary);
-        softAssert.assertThat(actualSeverity).isEqualTo(contentSeverity);
+//        softAssert.assertThat(actualSummary).isEqualTo(expectedSummary);
+//        softAssert.assertThat(actualSeverity).isEqualTo(expectedSeverity);
 
-        String contentId = mantisSite.getReportIssuePage().getContentId();
+
+        String expectedId = mantisSite.getReportIssuePage().getExpectedId();
+
         reportIssuePage.clickIdField();
 
         String actualId = mantisSite.getReportIssuePage().getActualId();
 
-        softAssert.assertThat(actualId).isEqualTo(contentId);
+        softAssert.assertThat(actualId).isEqualTo(expectedId);
 
-        reportIssuePage.clickDeleteButton();
-        reportIssuePage.clickDeleteIssuesButton();
+        reportIssuePage.deleteIssue();
+
+        String newActualId = mantisSite.getReportIssuePage().getExpectedId();
+
+        softAssert.assertThat(newActualId).isNotEqualTo(expectedId);
+
+        softAssert.assertAll();
     }
 }

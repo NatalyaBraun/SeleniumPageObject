@@ -3,9 +3,11 @@ package mantis.tests;
 import mantis.pages.MantisSite;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ViewIssuesTest extends BaseTest {
     private MantisSite mantisSite;
+
 
     @Test
     public void checkIssuesNumber() throws InterruptedException {

@@ -1,20 +1,21 @@
 package mantis.pages;
 
 import Utils.TestUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class ReportIssuePage {
     private final WebDriver driver;
     private final WebDriverWait wait;
-
-    @FindBy(css = "#mantisbt/bug_report_page.php")
-    private WebElement reportIssuePageButton;
 
     @FindBy(css = "#summary")
     private WebElement summaryField;
@@ -55,45 +56,37 @@ public class ReportIssuePage {
         PageFactory.initElements(driver, this);
     }
 
-    LocalDate currentDate = LocalDate.now();
+    String currentDate = new SimpleDateFormat("dd-MM-yyyy (HH:mm:ss)").format(new Date());
 
-    public void inputSummary(String inputSummary) {
+    public void createNewIssueWithRequeredFileds(String summary, String description) {
         summaryField.sendKeys("summary" + " " + currentDate);
-    }
-
-    public void inputDescription(String description) {
         descriptionField.sendKeys(description);
-    }
+//        String summaryFieldText = summaryField.getText();
+//        summaryField.getText();
 
-    public void clickSubmitIssueButton() {
+        severityField.click();
+        severityBlock.click();
+
+//        String SeverityFieldText = severityBlock.getText();
+//        severityBlock.getText();
+
+        TestUtils.scrollToElement(driver, submitIssueButton);
         submitIssueButton.click();
     }
 
-    public void scrollToSubmitIssueButton() {
-        TestUtils.scrollToElement(driver, submitIssueButton);
-    }
-
-    public String getSummary() {
-        return (("summary" + " " + LocalDate.now()));
-    }
+//    public String getExpectedSummary() {
+//             return summaryFieldText;
+//         }
 
     public String getActualSummary() {
-        return actualSummaryField.getText();
-    }
+         return actualSummaryField.getText();
+     }
 
-    public void clickSeverityField() {
-        severityField.click();
-    }
+//    public String getExpectedSeverity() {
+//             return summaryFieldText;
+//         }
 
-    public void clickSeverityBlock() {
-        severityBlock.click();
-    }
-
-    public String getSeverityBlock() {
-        return severityBlock.getText();
-    }
-
-    public String getSeverity() {
+    public String getActualSeverity() {
         return severity.getText();
     }
 
@@ -101,7 +94,7 @@ public class ReportIssuePage {
         idField.click();
     }
 
-    public String getContentId() {
+    public String getExpectedId() {
         return idField.getText();
     }
 
@@ -109,11 +102,13 @@ public class ReportIssuePage {
         return actualId.getText();
     }
 
-    public void clickDeleteButton() {
+    public void deleteIssue() {
         deleteButton.click();
+        deleteIssuesButton.click();
     }
 
-    public void clickDeleteIssuesButton() {
-        deleteIssuesButton.click();
+    public void waitId(){
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//table[@id='buglist']/tbody/tr/td[4]/a")));
     }
 }

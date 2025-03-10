@@ -8,10 +8,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.time.Duration;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 public class ReportIssuePage {
     private final WebDriver driver;
@@ -29,14 +29,8 @@ public class ReportIssuePage {
     @FindBy(xpath = "//*[@id='buglist']/tbody/tr[1]/td[11]")
     private WebElement actualSummaryField;
 
-    @FindBy(css = "#severity")
-    private WebElement severityField;
-
-    @FindBy(xpath = "//*[@id='severity']/option[8]")
-    private WebElement severityBlock;
-
-    @FindBy(xpath = "//*[@id='buglist']/tbody/tr[1]/td[8]/span")
-    private WebElement severity;
+    @FindBy(xpath = " //tr[11]/td")
+    private WebElement actualDescriptionField;
 
     @FindBy(xpath = "//table[@id='buglist']/tbody/tr/td[4]/a")
     private WebElement idField;
@@ -56,38 +50,21 @@ public class ReportIssuePage {
         PageFactory.initElements(driver, this);
     }
 
-    String currentDate = new SimpleDateFormat("dd-MM-yyyy (HH:mm:ss)").format(new Date());
-
     public void createNewIssueWithRequeredFileds(String summary, String description) {
-        summaryField.sendKeys("summary" + " " + currentDate);
+
+        summaryField.sendKeys("summary" + " " + Timestamp.valueOf(LocalDateTime.now()));
         descriptionField.sendKeys(description);
-//        String summaryFieldText = summaryField.getText();
-//        summaryField.getText();
-
-        severityField.click();
-        severityBlock.click();
-
-//        String SeverityFieldText = severityBlock.getText();
-//        severityBlock.getText();
 
         TestUtils.scrollToElement(driver, submitIssueButton);
         submitIssueButton.click();
     }
 
-//    public String getExpectedSummary() {
-//             return summaryFieldText;
-//         }
-
     public String getActualSummary() {
-         return actualSummaryField.getText();
-     }
+        return actualSummaryField.getText();
+    }
 
-//    public String getExpectedSeverity() {
-//             return summaryFieldText;
-//         }
-
-    public String getActualSeverity() {
-        return severity.getText();
+    public String getActualDescription() {
+        return actualDescriptionField.getText();
     }
 
     public void clickIdField() {
@@ -107,7 +84,7 @@ public class ReportIssuePage {
         deleteIssuesButton.click();
     }
 
-    public void waitId(){
+    public void waitId() {
         wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//table[@id='buglist']/tbody/tr/td[4]/a")));
     }
